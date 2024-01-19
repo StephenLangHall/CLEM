@@ -1,0 +1,16 @@
+#!/bin/zsh
+
+printf "FROM:  ";read FROM
+printf "TO:    ";read TO
+printf "TITLE: ";read TITLE
+vim CONTENT.md
+CONTENT="$(cat CONTENT.md | smu)"
+curl -X POST 'https://api.resend.com/emails' \
+  -H 'Authorization: Bearer <API KEY FOR RESEND>' \
+  -H 'Content-Type: application/json' \
+  -d $"{
+    \"from\": \"$FROM\",
+    \"to\": \"$TO\",
+    \"subject\": \"$TITLE\",
+    \"html\": \"$CONTENT\"
+  }" && rm CONTENT.md
